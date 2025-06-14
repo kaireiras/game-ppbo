@@ -32,7 +32,8 @@ public class GamePanel extends JPanel implements Runnable {
     public AssetSetter aSet = new AssetSetter(this);
     public Player player = new Player(this, keyH);
     public SuperObjek obj[] = new SuperObjek[10];
-    public UtilityTool uTool = new UtilityTool();
+    public UI ui = new UI(this);
+    public EventHandler eHand = new EventHandler(this);
 
     //Game state
     public int gameState;
@@ -45,6 +46,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true); //gambar dulu "dibelakang" baru ditampilin, tpi sekarang dah otomatis
         this.addKeyListener(keyH);
         this.setFocusable(true);
+        gameState = playState;
     }
 
     public void setGame() {
@@ -89,6 +91,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
+
         player.update();
     }
 
@@ -97,6 +100,7 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
         tileM.draw(g2);
         player.draw(g2);
+        ui.draw(g2);
         g2.dispose();
     }
 }

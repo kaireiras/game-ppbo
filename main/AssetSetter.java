@@ -1,5 +1,7 @@
 package main;
 
+import objek.Heart;
+
 public class AssetSetter {
     GamePanel gp;
     public AssetSetter(GamePanel gp) {
@@ -7,6 +9,6 @@ public class AssetSetter {
     }
 
     public void setObjek() {
-        gp.obj[0] = new
+
     }
 }

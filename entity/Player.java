@@ -22,7 +22,9 @@ public class Player extends Entity {
         screenX = gp.screenWidth/2 - (gp.tileSize/2); // koordinat dimana background akan digambarkan
         screenY = gp.screenHight/2 - (gp.tileSize/2);
 
-        collisionArea = new Rectangle(8, 16, 32, 32); // Ukuran yang mau di solid kan!!
+        solidArea = new Rectangle(8, 16, 32, 32);
+        this.solidAreaDefaultX = solidArea.x;
+        this.solidAreaDefaultY = solidArea.y;
 
         setDefaultValue();
         getPlayerImage();
@@ -31,7 +33,10 @@ public class Player extends Entity {
         worldX = gp.tileSize * 42; // posisi karakter
         worldY = gp.tileSize * 45;
         speed = 4;
-        direction = "up";
+        direction = "down";
+
+        maxLife = 6;
+        life = maxLife;
     }
     public void getPlayerImage() {
         try {
