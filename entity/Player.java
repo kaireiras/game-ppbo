@@ -22,7 +22,9 @@ public class Player extends Entity {
         screenX = gp.screenWidth/2 - (gp.tileSize/2); // koordinat dimana background akan digambarkan
         screenY = gp.screenHight/2 - (gp.tileSize/2);
 
-        solidArea = new Rectangle(8, 16, 32, 32);
+        collisionArea = new Rectangle(8, 16, 32, 32);
+
+        solidArea = new Rectangle(1, 2, 46, 46);
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
 
