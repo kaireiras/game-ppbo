@@ -19,7 +19,7 @@ public class TileManager {
         tile = new Tile[30];
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
         getTailImage();
-        loadMap("/Maps_des/worldMap.txt");
+        loadMap("/Maps_des/new-map.txt");
     }
 
     public void getTailImage() {
@@ -64,7 +64,6 @@ public class TileManager {
                 if (col == gp.maxWorldCol) {
                     col = 0;
                     row++;
-                    System.out.println((mapTileNum[0][0]));
                 }
             }
             br.close();
@@ -90,7 +89,6 @@ public class TileManager {
                 worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
                 worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
                 worldY - gp.tileSize < gp.player.worldY + gp.player.screenX) {
-                System.out.println(tileNum);
                 
                 g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
             }

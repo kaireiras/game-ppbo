@@ -34,8 +34,8 @@ public class Player extends Entity {
         getPlayerImage();
     }
     public void setDefaultValue() {
-        worldX = gp.tileSize * 50; // posisi karakter
-        worldY = gp.tileSize * 53;
+        worldX = gp.tileSize * 24; // posisi karakter
+        worldY = gp.tileSize * 24;
         speed = 4;
         direction = "down";
 
@@ -74,6 +74,7 @@ public class Player extends Entity {
 
             collisionOn = false;
             gp.cCol.checkTile(this);
+            gp.eHand.checkEvent();
 
             if (collisionOn == false) {
                 switch (direction) {

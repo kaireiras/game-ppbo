@@ -11,6 +11,8 @@ public class UI {
     GamePanel gp;
     Graphics2D g2;
     BufferedImage heart_full, heart_half, heart_blank;
+    public String currentDialogue = "";
+
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -44,7 +46,7 @@ public class UI {
         // Step 2: Gambar isi heart (full dan half) sesuai life
         x = gp.tileSize / 2;
         i = 0;
-        int lifeNow = 5;
+        int lifeNow = gp.player.life;
 
         while (lifeNow > 0) {
             if (lifeNow >= 2) {
@@ -53,7 +55,7 @@ public class UI {
             } else {
                 g2.drawImage(heart_half, x, y, null);
                 lifeNow -= 1;
-                System.out.println("HIDUP JOKOWI");
+
             }
             x += gp.tileSize;
         }

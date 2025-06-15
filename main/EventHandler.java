@@ -6,6 +6,7 @@ public class EventHandler {
     GamePanel gp;
     Rectangle eventRect;
     int eventRectDefaultX, eventRectDefaultY;
+    String dialog;
 
     public EventHandler(GamePanel gp) {
         this.gp = gp;
@@ -20,14 +21,36 @@ public class EventHandler {
     }
 
     public void checkEvent() {
-
+        if (hit(51,53,"right") == true) { damagePit(); }
     }
 
     public boolean hit(int eventCol, int eventRow, String reqDirection) {
         boolean hit = false;
 
-        int playerX = gp.player.solidArea.x;
+        gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
+        gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
+        eventRect.x = eventCol*gp.tileSize + eventRect.x;
+        eventRect.y = eventRow*gp.tileSize + eventRect.y;
+
+        if (gp.player.solidArea.intersects(eventRect)) {
+            if (gp.player.direction.contentEquals(reqDirection) || reqDirection.contentEquals("any")) {
+                hit = true;
+            }
+        }
+
+        gp.player.solidArea.x = gp.player.solidAreaDefaultX;
+        gp.player.solidArea.y = gp.player.solidAreaDefaultY;
+        eventRect.x = eventRectDefaultX;
+        eventRect.y = eventRectDefaultY;
 
         return hit;
+    }
+
+    public void damagePit() {
+            String dialog = "You fall into a pit!!";
+            gp.ui.currentDialogue = dialog;
+            gp.player.life -= 1;
+
+            System.out.println(dialog);
     }
 }
