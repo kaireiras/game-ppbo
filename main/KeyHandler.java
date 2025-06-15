@@ -7,6 +7,7 @@ public class KeyHandler implements KeyListener {
 
     public boolean upPressed, downPressed, rightPressed, leftPressed;
     public boolean wPressed, aPressed, sPressed, dPressed;
+    public boolean ePressed, kPressed;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -42,6 +43,13 @@ public class KeyHandler implements KeyListener {
             dPressed = true;
         }
 
+        if (code == KeyEvent.VK_E){
+            ePressed = true;
+        }
+        if(code == KeyEvent.VK_K){
+            kPressed = true;
+        }
+
     }
 
     @Override
@@ -73,5 +81,6 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_D) {
             dPressed = false;
         }
+
     }
 }

@@ -32,6 +32,7 @@ public class Player2 extends Entity {
 
         setDefaultValue();
         getPlayerImage();
+        getPlayerAttackImage();
     }
     public void setDefaultValue() {
         worldX = gp.tileSize * 25; // posisi karakter
@@ -57,7 +58,30 @@ public class Player2 extends Entity {
             e.printStackTrace();
         }
     }
+
+    public void getPlayerAttackImage(){
+        attackUp1 = setup("/Player_des/boy_attack_up_1.png");
+        attackUp2 = setup("/Player_des/boy_attack_up_2.png");
+        attackDown1 = setup("/Player_des/boy_attack_down_1.png");
+        attackDown2 = setup("/Player_des/boy_attack_down_2.png");
+        attackLeft1 = setup("/Player_des/boy_attack_left_1.png");
+        attackLeft2 = setup("/Player_des/boy_attack_left_2.png");
+        attackRight1 = setup("/Player_des/boy_attack_right_1.png");
+        attackRight2 = setup("/Player_des/boy_attack_right_2.png");
+    }
+
     public void update() {
+
+        if (attacking == true){
+            attacking();
+            return;
+        }
+
+        if (keyH.ePressed == true) {
+            attacking = true;
+            keyH.ePressed = false;
+        }
+
         if (keyH.wPressed || keyH.aPressed || keyH.sPressed || keyH.dPressed) {
             if (keyH.wPressed) {
                 direction = "up";
@@ -117,48 +141,75 @@ public class Player2 extends Entity {
             }
         }
     }
+
+    private void attacking() {
+        spriteCounter++;
+
+        if(spriteCounter <= attackSpeed1){
+            spriteNum = 1;
+        }
+        else if(spriteCounter <= attackSpeed1 + attackSpeed2){
+            spriteNum =2;
+        }
+        else{
+            spriteNum = 1;
+            spriteCounter = 0;
+            attacking = false;
+        }
+    }
+
+
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
 
         switch (direction) {
             case "up":
-                if (spriteNum == 1) {
-                    image = up1;
+                if(attacking == false){
+                    if (spriteNum == 1) {image = up1;}
+                    if (spriteNum == 2) {image = up2;}
                 }
-                if (spriteNum == 2) {
-                    image = up2;
+                if(attacking == true){
+                    if (spriteNum == 1) {image = attackUp1;}
+                    if (spriteNum == 2) {image = attackUp2;}
                 }
                 break;
             case "down":
-                if (spriteNum == 1) {
-                    image = down1;
+                if(attacking == false){
+                    if (spriteNum == 1) {image = down1;}
+                    if (spriteNum == 2) {image = down2;}
                 }
-                if (spriteNum == 2) {
-                    image = down2;
+                if(attacking == true){
+                    if (spriteNum == 1) {image = attackDown1;}
+                    if (spriteNum == 2) {image = attackDown2;}
                 }
                 break;
             case "right":
-                if (spriteNum == 1) {
-                    image = right1;
+                if(attacking == false){
+                    if (spriteNum == 1) {image = right1;}
+                    if (spriteNum == 2) {image = right2;}
                 }
-                if (spriteNum == 2) {
-                    image = right2;
+                if(attacking == true){
+                    if (spriteNum == 1) {image = attackRight1;}
+                    if (spriteNum == 2) {image = attackRight2;}
                 }
                 break;
             case "left":
-                if (spriteNum == 1) {
-                    image = left1;
+                if(attacking == false){
+                    if (spriteNum == 1) {image = left1;}
+                    if (spriteNum == 2) {image = left2;}
                 }
-                if (spriteNum == 2) {
-                    image = left2;
+                if(attacking == true){
+                    if (spriteNum == 1) {image = attackLeft1;}
+                    if (spriteNum == 2) {image = attackLeft2;}
                 }
                 break;
             case "no":
-                if (silenceNum == 1) {
-                    image = up1;
-                }
-                if (silenceNum == 2) {
-                    image = up2;
+                if(attacking == true){
+                    if (spriteNum == 1) {image = attackDown1;}
+                    if (spriteNum == 2) {image = attackDown2;}
+                }else{
+                    if (silenceNum == 1) {image = down1;}
+                    if (silenceNum == 2) {image = down2;}
                 }
                 break;
         }

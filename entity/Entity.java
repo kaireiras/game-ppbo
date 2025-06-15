@@ -11,8 +11,12 @@ public class Entity {
     public GamePanel gp;
     public int worldX, worldY;
     public int speed;
+    public int attackSpeed1 = 3;
+    public int attackSpeed2 = 2;
 
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2, breath1, breath2;
+    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2,
+            attackRight1, attackRight2, attackleft1, attackleft2;
     public String direction;
 
     public String name;
@@ -25,6 +29,7 @@ public class Entity {
 
     public Rectangle collisionArea;
     public boolean collisionOn = false;
+    public boolean attacking = false;
 
 
     public int actionLockCounter = 0;
