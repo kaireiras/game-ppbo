@@ -1,14 +1,17 @@
 package main;
 
+import entity.Entity;
 import entity.Player;
 import objek.SuperObjek;
 import tile.TileManager;
 
 import javax.swing.JPanel;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements Runnable {
 
+    public ArrayList<Entity> entitylist = new ArrayList<>();
     final int originalTileSize = 16; //Ukuran awalnya 16x16
     final int scale = 3; //dikali 3 biar jadi gede ukurannya (disesuaikan dengan layar skrg)
 
@@ -31,6 +34,7 @@ public class GamePanel extends JPanel implements Runnable {
     public CollisionCheck cCol = new CollisionCheck(this);
     public AssetSetter aSet = new AssetSetter(this);
     public Player player = new Player(this, keyH);
+    public Entity enemy[] = new Entity[20];
     public SuperObjek obj[] = new SuperObjek[10];
     public UI ui = new UI(this);
     public EventHandler eHand = new EventHandler(this);
@@ -51,6 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setGame() {
         aSet.setObjek();
+        aSet.setEnemy();
     }
 
     public void startGameThread() {
@@ -93,14 +98,36 @@ public class GamePanel extends JPanel implements Runnable {
     public void update() {
 
         player.update();
+
+        for(int i = 0; i < enemy.length; i++){
+            if(enemy[i] != null){
+                enemy[i].update();
+            }
+        }
+
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         tileM.draw(g2);
+
+        for(int i = 0; i < enemy.length; i++) {
+            if(enemy[i] != null) {
+                enemy[i].draw(g2);
+            }
+        }
+
+
         player.draw(g2);
         ui.draw(g2);
         g2.dispose();
+
+        for (int i = 0; i < enemy.length; i++){
+            if(enemy[i] != null){
+                entitylist.add(enemy[i]);
+            }
+        }
+
     }
 }

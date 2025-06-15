@@ -16,6 +16,7 @@ public class Player extends Entity {
     public final int screenY;
 
     public Player(GamePanel gp, KeyHandler keyH) {
+        super(gp);
         this.gp = gp;
         this.keyH = keyH;
 
@@ -24,7 +25,8 @@ public class Player extends Entity {
 
         collisionArea = new Rectangle(8, 16, 32, 32);
 
-        solidArea = new Rectangle(1, 2, 46, 46);
+        solidArea = new Rectangle(8, 16, 32, 32);
+
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
 
