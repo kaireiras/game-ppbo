@@ -76,7 +76,4 @@ public class enemy_comando extends Entity{
         // Panggil update() dari Entity
         super.update();
     }
-
-
-
 }
