@@ -2,6 +2,7 @@ package main;
 
 import entity.Entity;
 import entity.Player;
+import entity.Player2;
 import objek.SuperObjek;
 import tile.TileManager;
 
@@ -34,6 +35,7 @@ public class GamePanel extends JPanel implements Runnable {
     public CollisionCheck cCol = new CollisionCheck(this);
     public AssetSetter aSet = new AssetSetter(this);
     public Player player = new Player(this, keyH);
+    public Player2 player2 = new Player2(this, keyH);
     public Entity enemy[] = new Entity[20];
     public SuperObjek obj[] = new SuperObjek[10];
     public UI ui = new UI(this);
@@ -100,6 +102,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void update() {
 
         player.update();
+        player2.update();
 
         for(int i = 0; i < enemy.length; i++){
             if(enemy[i] != null){
@@ -120,6 +123,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
         player.draw(g2);
+        player2.draw(g2);
         ui.draw(g2);
         g2.dispose();
 
