@@ -1,6 +1,7 @@
 package entity;
 
 import main.GamePanel;
+import main.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -11,12 +12,13 @@ public class Entity {
     public GamePanel gp;
     public int worldX, worldY;
     public int speed;
-    public int attackSpeed1 = 3;
-    public int attackSpeed2 = 2;
+    public int attackSpeed1 = 11;
+    public int attackSpeed2 = 12;
+    public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
 
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2, breath1, breath2;
     public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2,
-            attackRight1, attackRight2, attackleft1, attackleft2;
+            attackRight1, attackRight2;
     public String direction;
 
     public String name;
@@ -47,10 +49,12 @@ public class Entity {
 
     }
 
-    public BufferedImage setup(String imagePath) {
+    public BufferedImage setup(String imagePath, int width, int height) {
+        UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
         try {
             image = ImageIO.read(getClass().getResourceAsStream(imagePath));
+            image = uTool.scaleImage(image, width, height);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -89,17 +93,55 @@ public class Entity {
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
 
-        switch(direction) {
-            case "up": image = up1; break;
-            case "down": image = down1; break;
-            case "left": image = left1; break;
-            case "right": image = right1; break;
+        if(attacking) {
+            switch(direction) {
+                case "up":
+                    image = (spriteNum == 1) ? attackUp1 : attackUp2;
+                    break;
+                case "down":
+                    image = (spriteNum == 1) ? attackDown1 : attackDown2;
+                    break;
+                case "left":
+                    image = (spriteNum == 1) ? attackLeft1 : attackLeft2;
+                    break;
+                case "right":
+                    image = (spriteNum == 1) ? attackRight1 : attackRight2;
+                    break;
+            }
+        } else {
+            switch(direction) {
+                case "up": image = (spriteNum == 1) ? up1 : up2; break;
+                case "down": image = (spriteNum == 1) ? down1 : down2; break;
+                case "left": image = (spriteNum == 1) ? left1 : left2; break;
+                case "right": image = (spriteNum == 1) ? right1 : right2; break;
+            }
         }
+
 
         int screenX = worldX - gp.player.worldX + gp.player.screenX;
         int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
-        if(image != null)
+        if(attacking) {
+            switch (direction) {
+                case "up":
+                    g2.drawImage(image, screenX, screenY - gp.tileSize, gp.tileSize, gp.tileSize * 2, null);
+                    break;
+                case "down":
+                    g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize * 2, null);
+                    break;
+                case "left":
+                    g2.drawImage(image, screenX - gp.tileSize, screenY, gp.tileSize * 2, gp.tileSize, null);
+                    break;
+                case "right":
+                    g2.drawImage(image, screenX, screenY, gp.tileSize * 2, gp.tileSize, null);
+                    break;
+                case "no":
+                    g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize * 2, null);
+                    break;
+            }
+        } else {
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+        }
+
     }
 }

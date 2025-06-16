@@ -29,14 +29,14 @@ public class enemy_comando extends Entity{
     }
 
     public void getImage(){
-        up1 = setup("/enemy_des/comando_knife.png");
-        up2 = setup("/enemy_des/comando_pistol.png");
-        down1 = setup("/enemy_des/Commando_8.png");
-        down2 = setup("/enemy_des/Commando_9.png");
-        right1 = setup("/enemy_des/comando_walk_knife.png");
-        right2 = setup("/enemy_des/comando_walk_pistol.png");
-        left1 = setup("/enemy_des/comando_walk_pistol_left.png");
-        left2 = setup("/enemy_des/comando_walk_knife_left.png");
+        up1 = setup("/enemy_des/comando_knife.png", gp.tileSize, gp.tileSize);
+        up2 = setup("/enemy_des/comando_pistol.png", gp.tileSize, gp.tileSize);
+        down1 = setup("/enemy_des/Commando_8.png", gp.tileSize, gp.tileSize);
+        down2 = setup("/enemy_des/Commando_9.png", gp.tileSize, gp.tileSize);
+        right1 = setup("/enemy_des/comando_walk_knife.png", gp.tileSize, gp.tileSize);
+        right2 = setup("/enemy_des/comando_walk_pistol.png", gp.tileSize, gp.tileSize);
+        left1 = setup("/enemy_des/comando_walk_pistol_left.png", gp.tileSize, gp.tileSize);
+        left2 = setup("/enemy_des/comando_walk_knife_left.png", gp.tileSize, gp.tileSize);
     }
 
     public void setAction(){

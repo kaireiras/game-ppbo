@@ -15,6 +15,9 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
 
+    boolean playerHitRegistered = false;
+
+
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
         this.gp = gp;
@@ -29,6 +32,9 @@ public class Player extends Entity {
 
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
+
+        attackArea.width = 36;
+        attackArea.height = 36;
 
         setDefaultValue();
         getPlayerImage();
@@ -45,32 +51,25 @@ public class Player extends Entity {
 
     }
     public void getPlayerImage() {
-        try {
-            up1 = ImageIO.read(getClass().getResourceAsStream("/Player_des/up1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/Player_des/up2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/Player_des/down1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/Player_des/down2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/Player_des/right1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/Player_des/right2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/Player_des/left1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/Player_des/left4.png"));
-            breath1 = ImageIO.read(getClass().getResourceAsStream("/Player_des/stop1.png"));
-            breath2 = ImageIO.read(getClass().getResourceAsStream("/Player_des/stop2.png"));
-
-        }catch(IOException e) {
-            e.printStackTrace();
-        }
+        up1 = setup("/Player_des/boy_up_1.png", gp.tileSize, gp.tileSize);
+        up2 = setup("/Player_des/boy_up_2.png", gp.tileSize, gp.tileSize);
+        down1 = setup("/Player_des/boy_down_1.png", gp.tileSize, gp.tileSize);
+        down2 = setup("/Player_des/boy_down_2.png", gp.tileSize, gp.tileSize);
+        right1 = setup("/Player_des/boy_right_1.png", gp.tileSize, gp.tileSize);
+        right2 = setup("/Player_des/boy_right_2.png", gp.tileSize, gp.tileSize);
+        left1 = setup("/Player_des/boy_left_1.png", gp.tileSize, gp.tileSize);
+        left2 = setup("/Player_des/boy_left_2.png", gp.tileSize, gp.tileSize);
     }
 
     public void getPlayerAttackImage(){
-        attackUp1 = setup("/Player_des/boy_attack_up_1.png");
-        attackUp2 = setup("/Player_des/boy_attack_up_2.png");
-        attackDown1 = setup("/Player_des/boy_attack_down_1.png");
-        attackDown2 = setup("/Player_des/boy_attack_down_2.png");
-        attackLeft1 = setup("/Player_des/boy_attack_left_1.png");
-        attackLeft2 = setup("/Player_des/boy_attack_left_2.png");
-        attackRight1 = setup("/Player_des/boy_attack_right_1.png");
-        attackRight2 = setup("/Player_des/boy_attack_right_2.png");
+        attackUp1 = setup("/Player_des/boy_attack_up_1.png", gp.tileSize, gp.tileSize*2);
+        attackUp2 = setup("/Player_des/boy_attack_up_2.png", gp.tileSize, gp.tileSize*2);
+        attackDown1 = setup("/Player_des/boy_attack_down_1.png", gp.tileSize, gp.tileSize*2);
+        attackDown2 = setup("/Player_des/boy_attack_down_2.png", gp.tileSize, gp.tileSize*2);
+        attackLeft1 = setup("/Player_des/boy_attack_left_1.png", gp.tileSize*2, gp.tileSize);
+        attackLeft2 = setup("/Player_des/boy_attack_left_2.png", gp.tileSize*2, gp.tileSize);
+        attackRight1 = setup("/Player_des/boy_attack_right_1.png", gp.tileSize*2, gp.tileSize);
+        attackRight2 = setup("/Player_des/boy_attack_right_2.png", gp.tileSize*2, gp.tileSize);
     }
 
     public void update() {
@@ -82,12 +81,12 @@ public class Player extends Entity {
             return;
         }
 
-        if (keyH.kPressed = true) {
+        if (keyH.kPressed == true) {
             attacking = true;
             keyH.kPressed = false;
         }
 
-        if (keyH.upPressed || keyH.downPressed || keyH.rightPressed || keyH.leftPressed) {
+        else if (keyH.upPressed || keyH.downPressed || keyH.rightPressed || keyH.leftPressed) {
             if (keyH.upPressed) {
                 direction = "up";
             } else if (keyH.downPressed) {
@@ -147,24 +146,62 @@ public class Player extends Entity {
         }
     }
 
-    private void attacking() {
+    public void attacking() {
         spriteCounter++;
 
-        if(spriteCounter <= attackSpeed1){
+        if (spriteCounter <= 5) {
             spriteNum = 1;
         }
-        else if(spriteCounter <= attackSpeed1 + attackSpeed2){
-            spriteNum =2;
+        if (spriteCounter > 5 && spriteCounter <= 25) {
+            spriteNum = 2;
+
+            // Tentukan area serang
+            int attackX = worldX;
+            int attackY = worldY;
+
+            switch(direction) {
+                case "up": attackY -= attackArea.height; break;
+                case "down": attackY += attackArea.height; break;
+                case "left": attackX -= attackArea.width; break;
+                case "right": attackX += attackArea.width; break;
+            }
+
+            Rectangle attackBox = new Rectangle(attackX, attackY, attackArea.width, attackArea.height);
+
+            // Cek apakah kena player2
+            // Cek apakah kena player2
+            Rectangle targetBox = new Rectangle(
+                    gp.player2.worldX + gp.player2.solidArea.x,
+                    gp.player2.worldY + gp.player2.solidArea.y,
+                    gp.player2.solidArea.width,
+                    gp.player2.solidArea.height
+            );
+
+            if (attackBox.intersects(targetBox) && !playerHitRegistered) {
+                gp.player.life -= 1;
+                playerHitRegistered = true;
+                System.out.println(">> Player 1 terkena serangan Player 2!");
+            }
+
+
         }
-        else{
+
+        if (spriteCounter > 25) {
             spriteNum = 1;
             spriteCounter = 0;
             attacking = false;
+            playerHitRegistered = false; // Reset biar bisa hit lagi nanti
         }
+
     }
+
+
+
 
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
+        int tempScreenX = screenX;
+        int tempScreenY = screenY;
 
         switch (direction) {
             case "up":
@@ -173,6 +210,7 @@ public class Player extends Entity {
                     if (spriteNum == 2) {image = up2;}
                 }
                 if(attacking == true){
+                    tempScreenY = screenY - gp.tileSize;
                     if (spriteNum == 1) {image = attackUp1;}
                     if (spriteNum == 2) {image = attackUp2;}
                 }
@@ -212,13 +250,32 @@ public class Player extends Entity {
                     if (spriteNum == 1) {image = attackDown1;}
                     if (spriteNum == 2) {image = attackDown2;}
                 }else{
-                    if (silenceNum == 1) {image = breath1;}
-                    if (silenceNum == 2) {image = breath2;}
+                    if (silenceNum == 1) {image = down1;}
+                    if (silenceNum == 2) {image = down2;}
                 }
                 break;
         }
 
-        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
-
+        if(attacking) {
+            switch (direction) {
+                case "up":
+                    g2.drawImage(image, screenX, screenY - gp.tileSize, gp.tileSize, gp.tileSize * 2, null);
+                    break;
+                case "down":
+                    g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize * 2, null);
+                    break;
+                case "left":
+                    g2.drawImage(image, screenX - gp.tileSize, screenY, gp.tileSize * 2, gp.tileSize, null);
+                    break;
+                case "right":
+                    g2.drawImage(image, screenX, screenY, gp.tileSize * 2, gp.tileSize, null);
+                    break;
+                case "no":
+                    g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize * 2, null);
+                    break;
+            }
+        } else {
+            g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+        }
     }
 }
