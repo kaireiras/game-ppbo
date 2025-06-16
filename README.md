@@ -1,1 +1,1 @@
-nambahin asset di enemy_des, bikin enemy/enemy_comando.java, edit di entity, assetsetter, gamepanel
+aku nambahin random item. class di main.gamepanel Entity.itemdrop co kalo jadi pake ini bantuin selesain bugnya co. jadi itu si itemnya kalo diliat dari  mini map itu di pojok kiri atas terus di map juga gada
