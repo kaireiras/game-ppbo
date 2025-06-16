@@ -1,6 +1,7 @@
 package main;
 
 import entity.Entity;
+import entity.ItemDrop;
 import entity.Player;
 import entity.Player2;
 import objek.SuperObjek;
@@ -9,10 +10,15 @@ import tile.TileManager;
 import javax.swing.JPanel;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Iterator;
+import java.util.Random;
 
 public class GamePanel extends JPanel implements Runnable {
 
     public ArrayList<Entity> entitylist = new ArrayList<>();
+    public ArrayList<ItemDrop> itemDrops = new ArrayList<>();
+    public List<ItemDrop> itemstoRemove = new ArrayList<>();
     final int originalTileSize = 16; //Ukuran awalnya 16x16
     final int scale = 3; //dikali 3 biar jadi gede ukurannya (disesuaikan dengan layar skrg)
 
@@ -25,6 +31,7 @@ public class GamePanel extends JPanel implements Runnable {
     // WORLD
     public final int maxWorldCol = 48;
     public final int maxWorldRow = 48;
+    int itemDropCounter = 0;
 
     //FPS
     int FPS = 60;
@@ -46,6 +53,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
+
 
 
     public GamePanel() {
@@ -110,6 +118,75 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
+        itemDropCounter++;
+        if(itemDropCounter > 600){
+            spawnRandomItem();
+            itemDropCounter = 0;
+        }
+        checkItemPickup(player);
+        checkItemPickup(player2);
+
+        // Hapus semua item yang dikumpulkan
+        itemDrops.removeAll(itemstoRemove);
+        itemstoRemove.clear();
+
+    }
+
+    public void spawnRandomItem(){
+        Random rand = new Random();
+        int attempts = 0;
+        int maxAttempts = 100; // biar ga infinite loop
+        int col = 0, row = 0;
+
+        // Cari tile non-collision untuk item drop
+        do {
+            col = rand.nextInt(maxWorldCol);
+            row = rand.nextInt(maxWorldRow);
+            attempts++;
+        } while (tileM.tile[tileM.mapTileNum[col][row]].collision && attempts < maxAttempts);
+
+        // Kalau tidak dapat lokasi yang valid, keluar
+        if (attempts >= maxAttempts) {
+            System.out.println("Gagal menemukan lokasi drop yang valid.");
+            return;
+        }
+
+        int worldX = col * tileSize;
+        int worldY = row * tileSize;
+
+        ItemDrop.ItemType type = rand.nextInt(2) == 0 ? ItemDrop.ItemType.HEART : ItemDrop.ItemType.POWER;
+        itemDrops.add(new ItemDrop(this, type, worldX, worldY));
+
+        System.out.println("Spawn item di: (" + col + ", " + row + ") -> worldX: " + worldX + ", worldY: " + worldY);
+    }
+
+    public void checkItemPickup(Entity player){
+        for (ItemDrop item : itemDrops) {
+            Rectangle playerArea = new Rectangle(
+                    player.worldX + player.solidArea.x,
+                    player.worldY + player.solidArea.y,
+                    player.solidArea.width,
+                    player.solidArea.height
+            );
+
+            Rectangle itemArea = new Rectangle(
+                    item.worldX + item.solidArea.x,
+                    item.worldY + item.solidArea.y,
+                    item.solidArea.width,
+                    item.solidArea.height
+            );
+
+            if (playerArea.intersects(itemArea)) {
+                if (item.type == ItemDrop.ItemType.HEART) {
+                    player.life = Math.min(player.maxLife, player.life + 1);
+                } else if (item.type == ItemDrop.ItemType.POWER) {
+                    player.attackSpeed1 += 1;
+                }
+
+                // Tambahkan ke daftar untuk dihapus nanti
+                itemstoRemove.add(item);
+            }
+        }
     }
 
     public void drawMiniMap(Graphics2D g2){
@@ -160,6 +237,15 @@ public class GamePanel extends JPanel implements Runnable {
         g2.setColor(Color.BLUE);
         g2.fillOval(miniplayer2X, miniplayer2Y, playerSize, playerSize);
 
+        // Gambar item di mini map
+        g2.setColor(Color.MAGENTA);
+        for (ItemDrop item : itemDrops){
+            int miniX = x + (int)(item.worldX * scaleX);
+            int miniY = y + (int)(item.worldY * scaleY);
+            g2.fillOval(miniX, miniY, 4, 4); // ukuran titik item di minimap
+        }
+
+
 
     }
 
@@ -174,16 +260,23 @@ public class GamePanel extends JPanel implements Runnable {
                 enemy[i].draw(g2);
             }
         }
+
+        for (ItemDrop item : itemDrops){
+            int screenX = item.worldX - player.worldX + player.screenX;
+            int screenY = item.worldY - player.worldY + player.screenY;
+            g2.drawImage(item.image, screenX, screenY, tileSize, tileSize, null);
+        }
+
         player.draw(g2);
         player2.draw(g2);
         ui.draw(g2);
         g2.dispose();
 
-        for (int i = 0; i < enemy.length; i++){
-            if(enemy[i] != null){
-                entitylist.add(enemy[i]);
-            }
-        }
+//        for (int i = 0; i < enemy.length; i++){
+//            if(enemy[i] != null){
+//                entitylist.add(enemy[i]);
+//            }
+//        }
 
     }
 }
