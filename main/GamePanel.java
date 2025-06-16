@@ -140,10 +140,14 @@ public class GamePanel extends JPanel implements Runnable {
                 }
                 int miniX = x + (int)(col * tileSize * scaleX);
                 int miniY = y + (int)(row * tileSize * scaleY);
-                int miniTileSize =(int)(tileSize * scaleX);
-                g2.fillRect(miniX, miniY, miniTileSize, miniTileSize);
+                int miniTileWidth = Math.max(1, (int)Math.ceil(tileSize * scaleX));
+                int miniTileHeight = Math.max(1, (int)Math.ceil(tileSize * scaleY));
+                g2.fillRect(miniX, miniY, miniTileWidth, miniTileHeight);
             }
         }
+
+        g2.setStroke(new BasicStroke(1));
+
         // Gambar player di mini map
         int miniplayerX = x + (int)(player.worldX * scaleX);
         int miniplayerY = y + (int)(player.worldY * scaleY);
