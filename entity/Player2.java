@@ -23,12 +23,12 @@ public class Player2 extends Entity {
         this.gp = gp;
         this.keyH = keyH;
 
-        screenX = gp.screenWidth/2 - (gp.tileSize/2); // koordinat dimana background akan digambarkan
-        screenY = gp.screenHeight/2 - (gp.tileSize/2);
+        screenX = gp.getScreenWidth()/2 - (gp.tileSize/2); // koordinat dimana background akan digambarkan
+        screenY = gp.getScreenHeight()/2 - (gp.tileSize/2);
 
-        collisionArea = new Rectangle(8, 16, 32, 32);
+        collisionArea = new Rectangle(8, 16, 16, 16);
 
-        solidArea = new Rectangle(8, 16, 32, 32);
+        solidArea = new Rectangle(8, 16, 16, 16);
 
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
@@ -50,28 +50,29 @@ public class Player2 extends Entity {
         life2 = maxLife2;
     }
     public void getPlayerImage() {
-            up1 = setup("/Player_des/boy_up_1.png", gp.tileSize, gp.tileSize);
-            up2 = setup("/Player_des/boy_up_2.png", gp.tileSize, gp.tileSize);
-            down1 = setup("/Player_des/boy_down_1.png", gp.tileSize, gp.tileSize);
-            down2 = setup("/Player_des/boy_down_2.png", gp.tileSize, gp.tileSize);
-            right1 = setup("/Player_des/boy_right_1.png", gp.tileSize, gp.tileSize);
-            right2 = setup("/Player_des/boy_right_2.png", gp.tileSize, gp.tileSize);
-            left1 = setup("/Player_des/boy_left_1.png", gp.tileSize, gp.tileSize);
-            left2 = setup("/Player_des/boy_left_2.png", gp.tileSize, gp.tileSize);
+            up1 = setup("/Player_des/orc_walk1.png", gp.tileSize, gp.tileSize);
+            up2 = setup("/Player_des/orc_walk2_up.png", gp.tileSize, gp.tileSize);
+            down1 = setup("/Player_des/orc_walk1_down.png", gp.tileSize, gp.tileSize);
+            down2 = setup("/Player_des/orc_walk2_down.png", gp.tileSize, gp.tileSize);
+            right1 = setup("/Player_des/orc_walk1_right.png", gp.tileSize, gp.tileSize);
+            right2 = setup("/Player_des/orc_walk2_right.png", gp.tileSize, gp.tileSize);
+            left1 = setup("/Player_des/orc_walk1_left.png", gp.tileSize, gp.tileSize);
+            left2 = setup("/Player_des/orc_walk2_left.png", gp.tileSize, gp.tileSize);
     }
 
     public void getPlayerAttackImage(){
-        attackUp1 = setup("/Player_des/boy_attack_up_1.png", gp.tileSize, gp.tileSize*2);
-        attackUp2 = setup("/Player_des/boy_attack_up_2.png", gp.tileSize, gp.tileSize*2);
-        attackDown1 = setup("/Player_des/boy_attack_down_1.png", gp.tileSize, gp.tileSize*2);
-        attackDown2 = setup("/Player_des/boy_attack_down_2.png", gp.tileSize, gp.tileSize*2);
-        attackLeft1 = setup("/Player_des/boy_attack_left_1.png", gp.tileSize*2, gp.tileSize);
-        attackLeft2 = setup("/Player_des/boy_attack_left_2.png", gp.tileSize*2, gp.tileSize);
-        attackRight1 = setup("/Player_des/boy_attack_right_1.png", gp.tileSize*2, gp.tileSize);
-        attackRight2 = setup("/Player_des/boy_attack_right_2.png", gp.tileSize*2, gp.tileSize);
-        dying2 = setup("/Player_des/up1.png", gp.tileSize, gp.tileSize);
+        attackUp1 = setup("/Player_des/orc_attack_up.png", gp.tileSize, gp.tileSize);
+        attackUp2 = setup("/Player_des/orc_attack_up.png", gp.tileSize, gp.tileSize);
+        attackDown1 = setup("/Player_des/orc_attack_down.png", gp.tileSize, gp.tileSize);
+        attackDown2 = setup("/Player_des/orc_attack_down.png", gp.tileSize, gp.tileSize);
+        attackLeft1 = setup("/Player_des/orc_attack_left.png", gp.tileSize, gp.tileSize);
+        attackLeft2 = setup("/Player_des/orc_attack_left.png", gp.tileSize, gp.tileSize);
+        attackRight1 = setup("/Player_des/orc_attack_right.png", gp.tileSize, gp.tileSize);
+        attackRight2 = setup("/Player_des/orc_attack_right.png", gp.tileSize, gp.tileSize);
+        dying2 = setup("/Player_des/orc-die.png", gp.tileSize, gp.tileSize);
     }
 
+    @Override
     public void update() {
 
         if (attacking == true){
@@ -80,7 +81,6 @@ public class Player2 extends Entity {
         }
 
         if (keyH.ePressed == true) {
-            System.out.println("HIDOP JOKOWEEEE");
             attacking = true;
             keyH.ePressed = false;
         }
@@ -146,8 +146,8 @@ public class Player2 extends Entity {
         if (life2 <= 0) {
             direction = "dying2";
             spriteNum = 1;
-            attacking = false; // biar gak nyerang lagi
-            return; // keluar dari update, biar gak gerak/nyerang
+            attacking = false;
+            return;
         }
 
     }
@@ -161,7 +161,6 @@ public class Player2 extends Entity {
         if (spriteCounter > 5 && spriteCounter <= 25) {
             spriteNum = 2;
 
-            // SET ATTACK AREA
             int attackX = worldX;
             int attackY = worldY;
 
@@ -174,8 +173,6 @@ public class Player2 extends Entity {
 
             Rectangle attackBox = new Rectangle(attackX, attackY, attackArea.width, attackArea.height);
 
-            // CEK TABRAKAN DENGAN PLAYER 2
-            // Cek apakah kena player1
             Rectangle targetBox = new Rectangle(
                     gp.player.worldX + gp.player.solidArea.x,
                     gp.player.worldY + gp.player.solidArea.y,
@@ -186,13 +183,9 @@ public class Player2 extends Entity {
             if (attackBox.intersects(targetBox) && !playerHitRegistered) {
                 gp.player.life -= 1;
                 playerHitRegistered = true;
-                System.out.println(">> Player 1 terkena serangan Player 2!");
-                System.out.println("Life2: " + gp.player2.life2);
 
                 if (gp.player.life <= 0) {
                     gp.player.direction = "dying2";
-                    System.out.println(" PLAYER 1 MATIIIII");
-
                 }
             }
 
@@ -203,13 +196,9 @@ public class Player2 extends Entity {
             spriteNum = 1;
             spriteCounter = 0;
             attacking = false;
-            playerHitRegistered = false; // Reset biar bisa hit lagi nanti
+            playerHitRegistered = false;
         }
-
     }
-
-
-
 
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
@@ -223,7 +212,6 @@ public class Player2 extends Entity {
                     if (spriteNum == 2) {image = up2;}
                 }
                 if(attacking == true){
-//                    tempScreenY = screenY - gp.tileSize;
                     if (spriteNum == 1) {image = attackUp1;}
                     if (spriteNum == 2) {image = attackUp2;}
                 }
@@ -254,7 +242,6 @@ public class Player2 extends Entity {
                     if (spriteNum == 2) {image = left2;}
                 }
                 if(attacking == true){
-//                    tempScreenX = screenX - gp.tileSize;
                     if (spriteNum == 1) {image = attackLeft1;}
                     if (spriteNum == 2) {image = attackLeft2;}
                 }
@@ -273,8 +260,6 @@ public class Player2 extends Entity {
                 break;
             case "dying2":
                 image = dying2;
-                System.out.println("Direction Player2: " + direction);
-
                 break;
 
         }
@@ -287,19 +272,19 @@ public class Player2 extends Entity {
         } else if (attacking) {
             switch (direction) {
                 case "up":
-                    g2.drawImage(image, screenX, screenY - gp.tileSize, gp.tileSize, gp.tileSize * 2, null);
+                    g2.drawImage(image, screenX, screenY - gp.tileSize, gp.tileSize, gp.tileSize, null);
                     break;
                 case "down":
-                    g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize * 2, null);
+                    g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
                     break;
                 case "left":
-                    g2.drawImage(image, screenX - gp.tileSize, screenY, gp.tileSize * 2, gp.tileSize, null);
+                    g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
                     break;
                 case "right":
-                    g2.drawImage(image, screenX, screenY, gp.tileSize * 2, gp.tileSize, null);
+                    g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
                     break;
                 case "no":
-                    g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize * 2, null);
+                    g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
                     break;
             }
         } else {

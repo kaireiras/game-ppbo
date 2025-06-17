@@ -23,8 +23,8 @@ public class Player extends Entity {
         this.gp = gp;
         this.keyH = keyH;
 
-        screenX = gp.screenWidth/2 - (gp.tileSize/2); // koordinat dimana background akan digambarkan
-        screenY = gp.screenHeight/2 - (gp.tileSize/2);
+        screenX = gp.getScreenWidth()/2 - (gp.tileSize/2); // koordinat dimana background akan digambarkan
+        screenY = gp.getScreenHeight()/2 - (gp.tileSize/2);
 
         collisionArea = new Rectangle(8, 16, 32, 32);
 
@@ -70,9 +70,10 @@ public class Player extends Entity {
         attackLeft2 = setup("/Player_des/boy_attack_left_2.png", gp.tileSize*2, gp.tileSize);
         attackRight1 = setup("/Player_des/boy_attack_right_1.png", gp.tileSize*2, gp.tileSize);
         attackRight2 = setup("/Player_des/boy_attack_right_2.png", gp.tileSize*2, gp.tileSize);
-        dying = setup("/Player_des/down1.png", gp.tileSize, gp.tileSize);
+        dying = setup("/Player_des/boy-die.png", gp.tileSize, gp.tileSize);
     }
 
+    @Override
     public void update() {
 
         if (attacking == true){

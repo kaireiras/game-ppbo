@@ -42,10 +42,10 @@ public class UI {
 
     public void drawTitleScreen() {
         g2.setColor(new Color(0, 0, 0));
-        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
 
         g2.setFont(g2.getFont().deriveFont(Font.BOLD,96F));
-        String text = "JUDUL GAME";
+        String text = "BOY VS ORC";
         int x = centeredX(text);
         int y = gp.tileSize*3;
 
@@ -55,7 +55,7 @@ public class UI {
         g2.setColor(Color.white);
         g2.drawString(text, x, y);
 
-        x = gp.screenWidth/2 - (gp.tileSize*2)/2;
+        x = gp.getScreenWidth()/2 - (gp.tileSize*2)/2;
         y += gp.tileSize*2;
         g2.drawImage(gp.player.down1, x, y, gp.tileSize*2, gp.tileSize*2, null);
 
@@ -80,7 +80,7 @@ public class UI {
 
     public int centeredX(String text) {
         int length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-        int x = gp.screenWidth/2 - length/2;
+        int x = gp.getScreenWidth()/2 - length/2;
         return x;
     }
 
@@ -89,7 +89,7 @@ public class UI {
         int x = gp.tileSize / 2;
         int y = gp.tileSize / 2;
 
-        int x2 = gp.screenWidth - (tile * 3) - tile / 2;
+        int x2 = gp.getScreenWidth() - (tile * 3) - tile / 2;
         int y2 = gp.tileSize / 2;
 
         int i = 0;

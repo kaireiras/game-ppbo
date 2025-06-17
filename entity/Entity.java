@@ -1,6 +1,7 @@
 package entity;
 
 import main.GamePanel;
+import main.Metode;
 import main.UtilityTool;
 
 import javax.imageio.ImageIO;
@@ -8,7 +9,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Entity {
+public class Entity implements Metode {
     public GamePanel gp;
     public int worldX, worldY;
     public int speed;
@@ -32,8 +33,6 @@ public class Entity {
     public Rectangle collisionArea;
     public boolean collisionOn = false;
     public boolean attacking = false;
-//    boolean alive = true;
-//    boolean dying = false;
 
     int dyingCounter = 0;
     public int actionLockCounter = 0;
@@ -66,7 +65,10 @@ public class Entity {
         return image;
     }
 
-    public void setAction() {}
+    public void setAction() {
+
+    }
+
     public void update(){
         setAction();
 

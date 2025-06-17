@@ -7,7 +7,7 @@ public class Main {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
-        window.setTitle("Dino-adv");
+        window.setTitle("Boy vs Orc");
 
         GamePanel gamePanel = new GamePanel();
         gamePanel.requestFocusInWindow();

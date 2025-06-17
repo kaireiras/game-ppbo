@@ -13,14 +13,15 @@ import java.util.ArrayList;
 public class GamePanel extends JPanel implements Runnable {
 
     public ArrayList<Entity> entitylist = new ArrayList<>();
-    final int originalTileSize = 16; //Ukuran awalnya 16x16
-    final int scale = 3; //dikali 3 biar jadi gede ukurannya (disesuaikan dengan layar skrg)
+    private final int originalTileSize = 16; //Ukuran awalnya 16x16
+    private final int scale = 3; //dikali 3 biar jadi gede ukurannya (disesuaikan dengan layar skrg)
 
     public final int tileSize = originalTileSize * scale; //Ukurannya bakal 48x48
     public final int maxScreenCol = 16;
     public final int maxScreenRow = 12;
-    public final int screenWidth = tileSize * maxScreenCol; // 768px
-    public final int screenHeight = tileSize * maxScreenRow; // 576px
+
+    private int screenWidth = tileSize * maxScreenCol; // 768px
+    private int screenHeight = tileSize * maxScreenRow; // 576px
 
     // WORLD
     public final int maxWorldCol = 48;
@@ -37,7 +38,6 @@ public class GamePanel extends JPanel implements Runnable {
     public Player player = new Player(this, keyH);
     public Player2 player2 = new Player2(this, keyH);
     public Entity enemy[] = new Entity[20];
-    public SuperObjek obj[] = new SuperObjek[10];
     public UI ui = new UI(this);
     public EventHandler eHand = new EventHandler(this);
 
@@ -45,14 +45,20 @@ public class GamePanel extends JPanel implements Runnable {
     public int gameState;
     public final int playState = 1;
     public final int pauseState = 2;
-    public final int dialogueState = 3;
     public final int titleState = 0;
 
+    public int getScreenWidth() {
+        return tileSize * maxScreenCol;
+    }
+
+    public int getScreenHeight() {
+        return tileSize * maxScreenRow;
+    }
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
-        this.setDoubleBuffered(true); //gambar dulu "dibelakang" baru ditampilin, tpi sekarang dah otomatis
+        this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
         gameState = playState;
