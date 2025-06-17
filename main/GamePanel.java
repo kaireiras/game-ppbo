@@ -112,10 +112,62 @@ public class GamePanel extends JPanel implements Runnable {
 
     }
 
+    public void drawMiniMap(Graphics2D g2){
+        // ukuran mini map
+        int mapWidth = 150;
+        int mapHeight = 150;
+
+        // posisi mini map di layar
+        int x = (screenWidth - mapWidth) / 2;
+        int y = (screenHight - mapHeight) - 20;
+
+        // background kotak mini map
+        g2.setColor(new Color(0, 0, 0, 150));
+        g2. fillRoundRect(x, y, mapWidth, mapHeight, 10, 10);
+
+        // Hitung skala mini map
+        double scaleX = (double)mapWidth / (maxWorldCol * tileSize);
+        double scaleY = (double)mapHeight / (maxWorldRow * tileSize);
+
+        // Gambar tile yang bisa dilihat di mini map
+        for (int row = 0; row < maxWorldRow; row++){
+            for(int col = 0; col < maxWorldCol; col ++){
+                int tileNum = tileM.mapTileNum[col][row];
+                if(!tileM.tile[tileNum].collision){
+                    g2.setColor(Color.LIGHT_GRAY);
+                } else{
+                    g2.setColor(Color.DARK_GRAY);
+                }
+                int miniX = x + (int)(col * tileSize * scaleX);
+                int miniY = y + (int)(row * tileSize * scaleY);
+                int miniTileWidth = Math.max(1, (int)Math.ceil(tileSize * scaleX));
+                int miniTileHeight = Math.max(1, (int)Math.ceil(tileSize * scaleY));
+                g2.fillRect(miniX, miniY, miniTileWidth, miniTileHeight);
+            }
+        }
+
+        g2.setStroke(new BasicStroke(1));
+
+        // Gambar player di mini map
+        int miniplayerX = x + (int)(player.worldX * scaleX);
+        int miniplayerY = y + (int)(player.worldY * scaleY);
+        int playerSize = (int)(tileSize * scaleX);
+        g2.setColor(Color.RED);
+        g2.fillOval(miniplayerX, miniplayerY,playerSize, playerSize);
+
+        int miniplayer2X = x + (int)(player2.worldX * scaleX);
+        int miniplayer2Y = y + (int)(player2.worldY * scaleY);
+        g2.setColor(Color.BLUE);
+        g2.fillOval(miniplayer2X, miniplayer2Y, playerSize, playerSize);
+
+
+    }
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         tileM.draw(g2);
+        drawMiniMap(g2);
 
         for(int i = 0; i < enemy.length; i++) {
             if(enemy[i] != null) {

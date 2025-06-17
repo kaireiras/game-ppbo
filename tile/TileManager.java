@@ -14,6 +14,7 @@ public class TileManager {
     public Tile[] tile;
     public int mapTileNum[][];
 
+
     public TileManager(GamePanel gp) {
         this.gp = gp;
         tile = new Tile[30];
@@ -72,6 +73,8 @@ public class TileManager {
 
         }
     }
+
+
     public void draw(Graphics2D g2){
         int col = 0;
         int row = 0;
