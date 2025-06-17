@@ -24,7 +24,7 @@ public class Player extends Entity {
         this.keyH = keyH;
 
         screenX = gp.screenWidth/2 - (gp.tileSize/2); // koordinat dimana background akan digambarkan
-        screenY = gp.screenHight/2 - (gp.tileSize/2);
+        screenY = gp.screenHeight/2 - (gp.tileSize/2);
 
         collisionArea = new Rectangle(8, 16, 32, 32);
 
@@ -41,7 +41,7 @@ public class Player extends Entity {
         getPlayerAttackImage();
     }
     public void setDefaultValue() {
-        worldX = gp.tileSize * 24; // posisi karakter
+        worldX = gp.tileSize * 22; // posisi karakter
         worldY = gp.tileSize * 24;
         speed = 4;
         direction = "down";
@@ -70,11 +70,10 @@ public class Player extends Entity {
         attackLeft2 = setup("/Player_des/boy_attack_left_2.png", gp.tileSize*2, gp.tileSize);
         attackRight1 = setup("/Player_des/boy_attack_right_1.png", gp.tileSize*2, gp.tileSize);
         attackRight2 = setup("/Player_des/boy_attack_right_2.png", gp.tileSize*2, gp.tileSize);
+        dying = setup("/Player_des/down1.png", gp.tileSize, gp.tileSize);
     }
 
     public void update() {
-        System.out.println("attacking: " + attacking + "  key: " + keyH.kPressed);
-
 
         if (attacking == true){
             attacking();
@@ -95,7 +94,6 @@ public class Player extends Entity {
                 direction = "right";
             } else if (keyH.leftPressed) {
                 direction = "left";
-
             }
 
             collisionOn = false;
@@ -144,6 +142,14 @@ public class Player extends Entity {
                 silenceCounter = 0;
             }
         }
+        if (life <= 0) {
+            direction = "dying";
+            spriteNum = 1;
+            attacking = false; // biar gak nyerang lagi
+            return;
+        }
+
+
     }
 
     public void attacking() {
@@ -178,14 +184,15 @@ public class Player extends Entity {
             );
 
             if (attackBox.intersects(targetBox) && !playerHitRegistered) {
-                gp.player.life -= 1;
+                gp.player2.life2 -= 1;
                 playerHitRegistered = true;
-                System.out.println(">> Player 1 terkena serangan Player 2!");
+                System.out.println(">> Player 2 terkena serangan Player 1!");
+                if (gp.player2.life2 <= 0) {
+                    gp.player2.direction = "dying";
+                    System.out.println(" PLAYER 2 MATIIIII");
+                }
             }
-
-
         }
-
         if (spriteCounter > 25) {
             spriteNum = 1;
             spriteCounter = 0;
@@ -200,8 +207,6 @@ public class Player extends Entity {
 
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
-        int tempScreenX = screenX;
-        int tempScreenY = screenY;
 
         switch (direction) {
             case "up":
@@ -210,7 +215,6 @@ public class Player extends Entity {
                     if (spriteNum == 2) {image = up2;}
                 }
                 if(attacking == true){
-                    tempScreenY = screenY - gp.tileSize;
                     if (spriteNum == 1) {image = attackUp1;}
                     if (spriteNum == 2) {image = attackUp2;}
                 }
@@ -254,6 +258,14 @@ public class Player extends Entity {
                     if (silenceNum == 2) {image = down2;}
                 }
                 break;
+            case "dying":
+                if (spriteNum == 1) {image = dying;}
+                break;
+            case "dying2":
+                if (spriteNum == 1) {image = dying2;}
+                break;
+
+
         }
 
         if(attacking) {
@@ -273,6 +285,8 @@ public class Player extends Entity {
                 case "no":
                     g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize * 2, null);
                     break;
+                case "dying":
+                    g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
             }
         } else {
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);

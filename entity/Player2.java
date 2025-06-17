@@ -24,7 +24,7 @@ public class Player2 extends Entity {
         this.keyH = keyH;
 
         screenX = gp.screenWidth/2 - (gp.tileSize/2); // koordinat dimana background akan digambarkan
-        screenY = gp.screenHight/2 - (gp.tileSize/2);
+        screenY = gp.screenHeight/2 - (gp.tileSize/2);
 
         collisionArea = new Rectangle(8, 16, 32, 32);
 
@@ -41,13 +41,13 @@ public class Player2 extends Entity {
         getPlayerAttackImage();
     }
     public void setDefaultValue() {
-        worldX = gp.tileSize * 25; // posisi karakter
-        worldY = gp.tileSize * 25;
+        worldX = gp.tileSize * 26; // posisi karakter
+        worldY = gp.tileSize * 24;
         speed = 4;
         direction = "down";
 
-        maxLife = 6;
-        life = maxLife;
+        maxLife2 = 6;
+        life2 = maxLife2;
     }
     public void getPlayerImage() {
             up1 = setup("/Player_des/boy_up_1.png", gp.tileSize, gp.tileSize);
@@ -69,6 +69,7 @@ public class Player2 extends Entity {
         attackLeft2 = setup("/Player_des/boy_attack_left_2.png", gp.tileSize*2, gp.tileSize);
         attackRight1 = setup("/Player_des/boy_attack_right_1.png", gp.tileSize*2, gp.tileSize);
         attackRight2 = setup("/Player_des/boy_attack_right_2.png", gp.tileSize*2, gp.tileSize);
+        dying2 = setup("/Player_des/up1.png", gp.tileSize, gp.tileSize);
     }
 
     public void update() {
@@ -142,6 +143,13 @@ public class Player2 extends Entity {
                 silenceCounter = 0;
             }
         }
+        if (life2 <= 0) {
+            direction = "dying2";
+            spriteNum = 1;
+            attacking = false; // biar gak nyerang lagi
+            return; // keluar dari update, biar gak gerak/nyerang
+        }
+
     }
 
     public void attacking2() {
@@ -176,9 +184,16 @@ public class Player2 extends Entity {
             );
 
             if (attackBox.intersects(targetBox) && !playerHitRegistered) {
-                gp.player2.life -= 1;
+                gp.player.life -= 1;
                 playerHitRegistered = true;
-                System.out.println(">> Player 2 terkena serangan Player 1!");
+                System.out.println(">> Player 1 terkena serangan Player 2!");
+                System.out.println("Life2: " + gp.player2.life2);
+
+                if (gp.player.life <= 0) {
+                    gp.player.direction = "dying2";
+                    System.out.println(" PLAYER 1 MATIIIII");
+
+                }
             }
 
 
@@ -253,12 +268,23 @@ public class Player2 extends Entity {
                     if (silenceNum == 2) {image = down2;}
                 }
                 break;
+            case "dying":
+                image = dying;
+                break;
+            case "dying2":
+                image = dying2;
+                System.out.println("Direction Player2: " + direction);
+
+                break;
+
         }
 
         int screenX = worldX - gp.player.worldX + gp.player.screenX;
         int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
-        if(attacking) {
+        if (direction.equals("dying2")) {
+            g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+        } else if (attacking) {
             switch (direction) {
                 case "up":
                     g2.drawImage(image, screenX, screenY - gp.tileSize, gp.tileSize, gp.tileSize * 2, null);
@@ -279,8 +305,5 @@ public class Player2 extends Entity {
         } else {
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
         }
-
-
-
     }
 }

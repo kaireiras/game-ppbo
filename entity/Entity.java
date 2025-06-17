@@ -16,7 +16,7 @@ public class Entity {
     public int attackSpeed2 = 12;
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
 
-    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2, breath1, breath2;
+    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2, dying, dying2;
     public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2,
             attackRight1, attackRight2;
     public String direction;
@@ -32,12 +32,17 @@ public class Entity {
     public Rectangle collisionArea;
     public boolean collisionOn = false;
     public boolean attacking = false;
+//    boolean alive = true;
+//    boolean dying = false;
 
-
+    int dyingCounter = 0;
     public int actionLockCounter = 0;
 
     public int maxLife;
     public int life;
+
+    public int maxLife2;
+    public int life2;
 
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
     public int solidAreaDefaultX;

@@ -20,7 +20,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxScreenCol = 16;
     public final int maxScreenRow = 12;
     public final int screenWidth = tileSize * maxScreenCol; // 768px
-    public final int screenHight = tileSize * maxScreenRow; // 576px
+    public final int screenHeight = tileSize * maxScreenRow; // 576px
 
     // WORLD
     public final int maxWorldCol = 48;
@@ -30,7 +30,7 @@ public class GamePanel extends JPanel implements Runnable {
     int FPS = 60;
 
     TileManager tileM = new TileManager(this);
-    KeyHandler keyH = new KeyHandler();
+    KeyHandler keyH = new KeyHandler(this);
     Thread gameThread;
     public CollisionCheck cCol = new CollisionCheck(this);
     public AssetSetter aSet = new AssetSetter(this);
@@ -46,10 +46,11 @@ public class GamePanel extends JPanel implements Runnable {
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
+    public final int titleState = 0;
 
 
     public GamePanel() {
-        this.setPreferredSize(new Dimension(screenWidth, screenHight));
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true); //gambar dulu "dibelakang" baru ditampilin, tpi sekarang dah otomatis
         this.addKeyListener(keyH);
@@ -60,6 +61,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void setGame() {
         aSet.setObjek();
         aSet.setEnemy();
+        gameState = titleState;
     }
 
     public void startGameThread() {
@@ -119,7 +121,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         // posisi mini map di layar
         int x = (screenWidth - mapWidth) / 2;
-        int y = (screenHight - mapHeight) - 20;
+        int y = (screenHeight - mapHeight) - 20;
 
         // background kotak mini map
         g2.setColor(new Color(0, 0, 0, 150));
@@ -166,18 +168,25 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        tileM.draw(g2);
-        drawMiniMap(g2);
+
 
         for(int i = 0; i < enemy.length; i++) {
             if(enemy[i] != null) {
                 enemy[i].draw(g2);
             }
         }
-        player.draw(g2);
-        player2.draw(g2);
-        ui.draw(g2);
-        g2.dispose();
+
+        if (gameState == titleState) {
+            ui.draw(g2);
+        }
+        else {
+            tileM.draw(g2);
+            drawMiniMap(g2);
+            player.draw(g2);
+            player2.draw(g2);
+            ui.draw(g2);
+            g2.dispose();
+        }
 
         for (int i = 0; i < enemy.length; i++){
             if(enemy[i] != null){
