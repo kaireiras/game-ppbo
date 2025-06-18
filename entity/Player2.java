@@ -4,6 +4,7 @@ import main.GamePanel;
 import main.KeyHandler;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -186,6 +187,8 @@ public class Player2 extends Entity {
 
                 if (gp.player.life <= 0) {
                     gp.player.direction = "dying2";
+                    JOptionPane.showMessageDialog(null, "Player1 Mati", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+
                 }
             }
 
